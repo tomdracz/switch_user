@@ -36,8 +36,14 @@ class SwitchUserController < ApplicationController
         return
       end
       if SwitchUser.login_exclusive
+        if SwitchUser.switch_back
+          provider.remember_current_user(params[:remember] == "true")
+        end
         provider.login_exclusive(record.user, :scope => record.scope)
       else
+        if SwitchUser.switch_back
+          provider.remember_current_user(params[:remember] == "true")
+        end
         provider.login_inclusive(record.user, :scope => record.scope)
       end
     end
